@@ -11,7 +11,16 @@ class NotesController < ApplicationController
         user = User.find_by(id: params[:userId])
         render json: user, include: [:notes, :tags]
     end
+
+    def destroy
+        puts params
+        note = Note.find_by(id: params[:id])
+        user = User.find_by(id: note.user_id)
+        note.destroy
+        render json: user, include: [:notes, :tags]
+    end 
+
+
 end
 
 
-# {"userId"=>4, "name"=>"a", "text"=>"c", "tags"=>"s", "controller"=>"notes", "action"=>"create", "note"=>{"name"=>"a", "text"=>"c"}}
