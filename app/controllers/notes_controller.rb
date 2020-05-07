@@ -1,7 +1,6 @@
 class NotesController < ApplicationController
 
     def create
-        puts params
         new_note = Note.create(name: params[:name], text: params[:text], user_id: params[:userId])
         
         params[:tags].split(', ').each do |tag|
@@ -12,13 +11,23 @@ class NotesController < ApplicationController
         render json: user, include: [:notes, :tags]
     end
 
+
+    def update
+        note = Note.find_by(id: params[:noteId])
+        note.update(name: params[:name], text: params[:text])
+
+        user = User.find_by(id: params[:userId])
+        render json: user, include: [:notes, :tags]
+    end 
+
     def destroy
-        puts params
         note = Note.find_by(id: params[:id])
         user = User.find_by(id: note.user_id)
+        
         note.destroy
         render json: user, include: [:notes, :tags]
     end 
+
 
 
 end
